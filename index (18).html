@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Kirk Larsen & Ascanius - Adgang</title>
+
+<!--
+  ╔═══════════════════════════════════════════════════════════════════════╗
+  ║  CONFIGURACIÓN DEL PASSWORD                                            ║
+  ║                                                                        ║
+  ║  Password por defecto: "demo2026"                                      ║
+  ║                                                                        ║
+  ║  PARA CAMBIAR EL PASSWORD:                                             ║
+  ║  1. Abre la consola del navegador (F12 → pestaña "Console")            ║
+  ║  2. Pega esto sustituyendo TU_PASSWORD por el que quieras:             ║
+  ║                                                                        ║
+  ║     crypto.subtle.digest('SHA-256',                                    ║
+  ║       new TextEncoder().encode('TU_PASSWORD'))                         ║
+  ║       .then(h => console.log(                                          ║
+  ║         Array.from(new Uint8Array(h))                                  ║
+  ║         .map(b => b.toString(16).padStart(2,'0')).join('')             ║
+  ║       ));                                                              ║
+  ║                                                                        ║
+  ║  3. Copia el hash que sale en consola                                  ║
+  ║  4. Pégalo abajo en la variable APP_PASSWORD_HASH                      ║
+  ║  5. Guarda el archivo                                                  ║
+  ║  6. Sube de nuevo a Netlify                                            ║
+  ╚═══════════════════════════════════════════════════════════════════════╝
+-->
+<script>
+  // Hash SHA-256 del password "KLA-Jefaza2026!"
+  window.APP_PASSWORD_HASH = "42acebf67e97ed0fbfa7422bbbe86419997cf07012a59a99c0987cfcae8adfc2";
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.umd.js"></script>
+<style>
+  :root {
+    --navy: #002847;
+    --navy-2: #2E394B;
+    --navy-3: #2D384A;
+    --white: #FFFFFF;
+    --paper: #F4F3F1;
+    --gold: #CFAE76;
+    --coral: #D83848;
+    --grey-text: #707071;
+    --grey-line: #E6E8E7;
+
+    --bg: var(--paper);
+    --ink: #1a1f2b;
+    --muted: var(--grey-text);
+    --line: var(--grey-line);
+    --accent: var(--navy);
+    --accent-soft: #EDEEF1;
+    --warn: var(--coral);
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+    background: var(--white);
+    color: var(--ink);
+    margin: 0;
+    padding: 0;
+    line-height: 1.55;
+    font-size: 16px;
+    font-weight: 400;
+  }
+
+  /* ============ AUTH COVER ============ */
+  body.locked > *:not(#auth-cover) { display: none !important; }
+  body:not(.locked) #auth-cover { display: none; }
+
+  #auth-cover {
+    position: fixed;
+    inset: 0;
+    background: var(--navy, #002847);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  #auth-cover .auth-card {
+    background: var(--white, #fff);
+    border-top: 4px solid var(--gold, #CFAE76);
+    padding: 56px 56px 48px;
+    max-width: 460px;
+    width: 100%;
+    text-align: center;
+  }
+  #auth-cover .auth-eyebrow {
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold, #CFAE76);
+    margin: 0 0 18px;
+    font-weight: 600;
+  }
+  #auth-cover h1 {
+    font-family: "Libre Baskerville", Georgia, "Times New Roman", serif;
+    margin: 0 0 12px;
+    font-size: 26px;
+    font-weight: 400;
+    color: var(--navy, #002847);
+    line-height: 1.25;
+  }
+  #auth-cover p.auth-sub {
+    margin: 0 0 32px;
+    color: var(--grey-text, #707071);
+    font-size: 14px;
+  }
+  #auth-cover label {
+    display: block;
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--grey-text, #707071);
+    margin-bottom: 8px;
+    text-align: left;
+    font-weight: 500;
+  }
+  #auth-cover input[type="password"] {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--grey-line, #E6E8E7);
+    background: var(--white, #fff);
+    color: var(--ink, #1a1f2b);
+    font: inherit;
+    font-size: 16px;
+    margin-bottom: 18px;
+  }
+  #auth-cover input[type="password"]:focus {
+    outline: none;
+    border-color: var(--navy, #002847);
+    box-shadow: 0 0 0 1px var(--navy, #002847);
+  }
+  #auth-cover button {
+    width: 100%;
+    background: var(--coral, #D83848);
+    color: var(--white, #fff);
+    border: 1px solid var(--coral, #D83848);
+    padding: 13px 24px;
+    font: inherit;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 0;
+  }
+  #auth-cover button:hover { background: #c12d3c; border-color: #c12d3c; }
+  #auth-cover .auth-error {
+    color: var(--coral, #D83848);
+    font-size: 13px;
+    margin-top: 14px;
+    min-height: 18px;
+    text-align: left;
+  }
+  #auth-cover .auth-footer {
+    margin-top: 28px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--grey-text, #707071);
+    text-transform: uppercase;
+  }
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 32px 96px;
+  }
+  header {
+    background: var(--navy);
+    color: var(--white);
+    padding: 64px 32px 56px;
+    border-bottom: 4px solid var(--gold);
+    position: relative;
+  }
+  header .inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .lang-switcher {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    display: flex;
+    gap: 0;
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+  }
+  .lang-switcher button {
+    background: transparent;
+    color: rgba(255,255,255,0.55);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 6px 14px;
+    cursor: pointer;
+    font-weight: 600;
+    text-transform: uppercase;
+    border-radius: 0;
+  }
+  .lang-switcher button + button { border-left: none; }
+  .lang-switcher button.active {
+    background: var(--gold);
+    color: var(--navy);
+    border-color: var(--gold);
+  }
+  .lang-switcher button:hover:not(.active) {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.5);
+  }
+  header .eyebrow {
+    font-family: "Source Sans 3", sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 0 0 16px;
+    font-weight: 500;
+  }
+  h1 {
+    font-family: "Libre Baskerville", Georgia, "Times New Roman", serif;
+    margin: 0 0 12px;
+    font-size: 36px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+  header p {
+    margin: 0;
+    color: rgba(255,255,255,0.78);
+    font-size: 14px;
+    letter-spacing: 0.03em;
+  }
+  section {
+    margin-bottom: 32px;
+    padding: 28px 32px;
+    background: var(--paper);
+    border: 1px solid var(--grey-line);
+    border-radius: 0;
+  }
+  section h2 {
+    font-family: "Source Sans 3", sans-serif;
+    margin: 0 0 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--grey-line);
+    position: relative;
+  }
+  section h2::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 36px;
+    height: 2px;
+    background: var(--gold);
+  }
+  label {
+    display: block;
+    font-size: 12px;
+    color: var(--grey-text);
+    margin-bottom: 6px;
+    margin-top: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 500;
+  }
+  label:first-of-type { margin-top: 0; }
+  input[type="text"], input[type="date"], select, textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--grey-line);
+    border-radius: 0;
+    background: var(--white);
+    font: inherit;
+    color: var(--ink);
+    font-size: 15px;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 1px var(--navy);
+  }
+  textarea { resize: vertical; min-height: 60px; }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px 16px;
+  }
+  @media (max-width: 600px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+  .person-block {
+    border: 1px solid var(--grey-line);
+    border-left: 3px solid var(--gold);
+    border-radius: 0;
+    padding: 18px 20px;
+    margin-top: 16px;
+    background: var(--white);
+  }
+  .person-block h3 {
+    font-family: "Source Sans 3", sans-serif;
+    margin: 0 0 14px;
+    font-size: 11px;
+    color: var(--navy);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+  .row-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  button {
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 0;
+    border: 1px solid var(--navy-2);
+    background: var(--white);
+    padding: 10px 20px;
+    color: var(--navy);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    transition: background 0.15s, color 0.15s;
+  }
+  button.primary {
+    background: var(--coral);
+    color: var(--white);
+    border-color: var(--coral);
+    padding: 12px 28px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 13px;
+  }
+  button.primary:hover { background: #c12d3c; border-color: #c12d3c; }
+  button.secondary {
+    background: var(--navy-2);
+    color: var(--white);
+    border-color: var(--navy-2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  button.secondary:hover { background: var(--navy); border-color: var(--navy); }
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    font-size: 15px;
+  }
+  .checkbox-row input { width: auto; accent-color: var(--coral); }
+  .checkbox-row label { margin: 0; text-transform: none; letter-spacing: 0; font-size: 15px; color: var(--ink); font-weight: 400; }
+  .modules-list .checkbox-row {
+    border-bottom: 1px solid var(--grey-line);
+  }
+  .modules-list .checkbox-row:last-child { border-bottom: none; }
+  .help {
+    font-size: 13px;
+    color: var(--grey-text);
+    margin-top: 4px;
+    margin-bottom: 12px;
+    font-style: italic;
+  }
+  .actions-bar {
+    position: sticky;
+    bottom: 0;
+    background: linear-gradient(to top, var(--white) 75%, rgba(255,255,255,0));
+    padding: 24px 0 12px;
+    margin-top: 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-top: 1px solid var(--grey-line);
+  }
+  #status {
+    font-size: 13px;
+    color: var(--grey-text);
+    font-style: italic;
+  }
+  #status.error { color: var(--coral); font-style: normal; font-weight: 500; }
+  #preview {
+    display: none;
+    margin-top: 32px;
+    padding: 48px 56px;
+    background: var(--white);
+    border: 1px solid var(--grey-line);
+    border-top: 4px solid var(--navy);
+    border-radius: 0;
+    font-family: "Libre Baskerville", Georgia, "Times New Roman", serif;
+    font-size: 15px;
+    line-height: 1.75;
+    max-height: 760px;
+    overflow-y: auto;
+    color: var(--ink);
+  }
+  #preview .doc-title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 28px;
+    color: var(--navy);
+    letter-spacing: 0.02em;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--grey-line);
+    position: relative;
+  }
+  #preview .doc-title::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 2px;
+    background: var(--gold);
+  }
+  #preview table.doc-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+  }
+  #preview table.doc-table td {
+    width: 50%;
+    vertical-align: top;
+    padding: 16px 22px;
+    border: 1px solid var(--grey-line);
+  }
+  #preview table.doc-table td:first-child {
+    background: var(--paper);
+  }
+  #preview table.doc-table td p {
+    margin: 0 0 10px;
+  }
+  #preview table.doc-table strong {
+    color: var(--navy);
+    letter-spacing: 0.02em;
+  }
+  #preview p {
+    margin: 0 0 12px;
+  }
+  .hidden { display: none !important; }
+  .small { font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body class="locked">
+
+<!-- ============ AUTH COVER (visible hasta que se introduzca el password correcto) ============ -->
+<div id="auth-cover" aria-modal="true" role="dialog">
+  <div class="auth-card">
+    <p class="auth-eyebrow">Kirk Larsen &amp; Ascanius</p>
+    <h1>Notarialfuldmagtsgenerator</h1>
+    <p class="auth-sub">Indtast adgangskode for at fortsætte / Enter password to continue</p>
+    <form id="auth-form" autocomplete="off">
+      <label for="auth-input">Adgangskode / Password</label>
+      <input type="password" id="auth-input" autofocus autocomplete="current-password">
+      <button type="submit">Adgang / Access</button>
+      <div class="auth-error" id="auth-error"></div>
+    </form>
+    <p class="auth-footer">Internt værktøj / Internal tool</p>
+  </div>
+</div>
+
+<script>
+  // ====== Sistema de autenticación con password hasheado ======
+  (function() {
+    async function sha256Hex(str) {
+      const buf = new TextEncoder().encode(str);
+      const hash = await crypto.subtle.digest('SHA-256', buf);
+      return Array.from(new Uint8Array(hash))
+        .map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function unlock() {
+      sessionStorage.setItem('auth_ok', '1');
+      document.body.classList.remove('locked');
+      const cover = document.getElementById('auth-cover');
+      if (cover) cover.remove();
+    }
+
+    // Si ya autenticó en esta sesión, abrir directamente
+    if (sessionStorage.getItem('auth_ok') === '1') {
+      unlock();
+      return;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('auth-form');
+      const input = document.getElementById('auth-input');
+      const err = document.getElementById('auth-error');
+      let attempts = 0;
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        err.textContent = '';
+        const pwd = input.value;
+        if (!pwd) return;
+        const hash = await sha256Hex(pwd);
+        if (hash === window.APP_PASSWORD_HASH) {
+          unlock();
+        } else {
+          attempts++;
+          err.textContent = attempts >= 3
+            ? 'Forkert adgangskode / Wrong password (' + attempts + ')'
+            : 'Forkert adgangskode / Wrong password';
+          input.value = '';
+          input.focus();
+        }
+      });
+    });
+  })();
+</script>
+
+<header>
+  <div class="lang-switcher">
+    <button type="button" data-lang="da" class="active">DA</button>
+    <button type="button" data-lang="en">EN</button>
+  </div>
+  <div class="inner">
+    <p class="eyebrow" data-i18n="eyebrow">Kirk Larsen &amp; Ascanius - Notarial Power Generator</p>
+    <h1 data-i18n="title">Notarialfuldmagtsgenerator</h1>
+    <p data-i18n="subtitle">Tosproget skabelon på spansk og engelsk. Eksporterer til .docx klar til notarunderskrift.</p>
+  </div>
+</header>
+
+<div class="container">
+
+
+<section>
+  <h2 data-i18n="sec_type">1. Type fuldmagt</h2>
+  <label for="profile" data-i18n="lbl_profile">Profil</label>
+  <select id="profile"></select>
+</section>
+
+<section id="section-comparecencia" class="hidden">
+  <h2 data-i18n="sec_appear">2. Fremmøde</h2>
+  <label for="comparecencia" data-i18n="lbl_appearance">Type fremmødte</label>
+  <select id="comparecencia"></select>
+
+  <div id="people-container"></div>
+
+  <button type="button" id="add-person" class="secondary hidden" data-i18n="btn_add_person" style="margin-top:12px">+ Tilføj fremmødte</button>
+</section>
+
+<section id="section-entity" class="hidden">
+  <h2 id="entity-title">3. Selskabsoplysninger</h2>
+  <div id="entity-fields"></div>
+</section>
+
+<section id="section-apoderado-local">
+  <h2 data-i18n="sec_local">Lokal fuldmægtig</h2>
+  <p class="help" data-i18n="help_local">Tredje fuldmægtig, varierer efter sted. Bárbara Román og Michael Appel tilføjes automatisk.</p>
+  <div class="grid-2">
+    <div>
+      <label data-i18n="lbl_title">Titel</label>
+      <select id="al_tratamiento">
+        <option value="Don">Don</option>
+        <option value="Doña">Doña</option>
+      </select>
+    </div>
+    <div>
+      <label data-i18n="lbl_fullname">Fulde navn</label>
+      <input type="text" id="al_nombre" data-ph="ph_fullname" placeholder="Fulde navn">
+    </div>
+    <div>
+      <label data-i18n="lbl_nationality">Nationalitet</label>
+      <input type="text" id="al_nacionalidad" data-ph="ph_nationality_es" placeholder="española">
+    </div>
+    <div>
+      <label data-i18n="lbl_profession">Erhverv</label>
+      <input type="text" id="al_profesion" data-ph="ph_profession" placeholder="abogado / gestor">
+    </div>
+    <div>
+      <label data-i18n="lbl_marital">Civilstand</label>
+      <input type="text" id="al_estado_civil" data-ph="ph_marital" placeholder="casado / soltera / divorciado">
+    </div>
+    <div>
+      <label data-i18n="lbl_doctype">Dokumenttype</label>
+      <select id="al_doc_tipo">
+        <option value="D.N.I.">DNI</option>
+        <option value="N.I.E.">NIE</option>
+        <option value="pasaporte" data-i18n-opt="opt_passport">Pas</option>
+      </select>
+    </div>
+    <div>
+      <label data-i18n="lbl_docnum">Dokumentnummer</label>
+      <input type="text" id="al_doc_num">
+    </div>
+    <div>
+      <label data-i18n="lbl_profaddr">Professionel adresse</label>
+      <input type="text" id="al_direccion" data-ph="ph_profaddr" placeholder="Gade ..., postnr. by, land">
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 data-i18n="sec_powers">Beføjelser</h2>
+  <p class="help" data-i18n="help_powers">Standardbeføjelserne kommer fra den valgte profil. Du kan tilføje eller fjerne efter behov.</p>
+  <div id="modules-list" class="modules-list"></div>
+</section>
+
+<section>
+  <h2 data-i18n="sec_nie">NIE-konsulent (valgfri)</h2>
+  <div class="checkbox-row">
+    <input type="checkbox" id="gestor_nie_enabled">
+    <label for="gestor_nie_enabled" data-i18n="lbl_nie_enable" style="margin:0">Inkludér særlig beføjelse til konsulenten for NIE-ansøgning</label>
+  </div>
+  <div id="gestor-nie-fields" class="hidden">
+    <div class="grid-2">
+      <div>
+        <label data-i18n="lbl_fullname">Fulde navn</label>
+        <input type="text" id="gn_nombre">
+      </div>
+      <div>
+        <label data-i18n="lbl_doctype">Dokumenttype</label>
+        <select id="gn_doc_tipo">
+          <option value="D.N.I.">DNI</option>
+          <option value="N.I.E.">NIE</option>
+          <option value="pasaporte" data-i18n-opt="opt_passport">Pas</option>
+        </select>
+      </div>
+      <div>
+        <label data-i18n="lbl_docnum">Dokumentnummer</label>
+        <input type="text" id="gn_doc_num">
+      </div>
+      <div>
+        <label data-i18n="lbl_profaddr">Professionel adresse</label>
+        <input type="text" id="gn_direccion">
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2 data-i18n="sec_doc">Fuldmagtens gyldighed</h2>
+  <p class="help" data-i18n="help_doc">By og dato tilføjes af notaren. Angiv kun en slutdato, hvis fuldmagten ikke skal være tidsubegrænset.</p>
+  <div class="grid-2">
+    <div>
+      <label data-i18n="lbl_validity">Gyldighed</label>
+      <select id="doc_vigencia_tipo">
+        <option value="indef" data-i18n-opt="lbl_validity_indef">Tidsubegrænset</option>
+        <option value="fecha" data-i18n-opt="lbl_validity_date">Indtil dato</option>
+      </select>
+    </div>
+    <div id="vigencia-date-wrap" class="hidden">
+      <label data-i18n="lbl_validity_until">Gyldig indtil</label>
+      <input type="date" id="doc_vigencia_hasta">
+    </div>
+  </div>
+</section>
+
+<div class="actions-bar">
+  <span id="status"></span>
+  <div style="display:flex; gap:8px">
+    <button type="button" id="btn-preview" class="secondary" data-i18n="btn_preview">Forhåndsvisning</button>
+    <button type="button" id="btn-generate" class="primary" data-i18n="btn_generate">Generér .docx</button>
+  </div>
+</div>
+
+<div id="preview"></div>
+
+</div>
+
+<script>
+// ============================================================
+// DATA - Modules and profiles
+// ============================================================
+
+const MONTHS_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const MONTHS_EN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+const APODERADOS_FIJOS = {
+  es: [
+    "DOÑA BÁRBARA ROMÁN MÉNDEZ, de nacionalidad española, abogada, casada, con domicilio profesional en Kirk Larsen & Ascanius, H.C. Andersens Blvd. 45, 1553 Copenhague V, Dinamarca.",
+    "DON MICHAEL APPEL, de nacionalidad danesa, abogado, divorciado, con domicilio profesional en Kirk Larsen & Ascanius, Dalgasgade 21, 2, 7400 Herning, Dinamarca."
+  ],
+  en: [
+    "MS. BÁRBARA ROMÁN MÉNDEZ, of Spanish nationality, lawyer, married, with professional address at Kirk Larsen & Ascanius, H.C. Andersens Blvd. 45, 1553 Copenhagen V, Denmark.",
+    "MR. MICHAEL APPEL, of Danish nationality, lawyer, divorced, with professional address at Kirk Larsen & Ascanius, Dalgasgade 21, 2, 7400 Herning, Denmark."
+  ]
+};
+
+const MODULES = {
+  F1: {
+    label: "Compra de bienes en España",
+    title_es: "COMPRA DE BIENES EN ESPAÑA",
+    title_en: "PURCHASE OF ASSETS IN SPAIN",
+    es: "Comprar bienes muebles e inmuebles situados en territorio español, o participaciones indivisas o cualquier derecho real sobre los mismos, fijando libremente precio, condiciones y forma de pago; en caso de aplazamiento, estipular las garantías pertinentes, incluida la condición resolutoria, y cobrar o cancelar dichas garantías en su día. Recibir cheques en pago del precio o endosarlos para su ingreso en cuenta.\n\nComo actos preparatorios o complementarios: suscribir contratos de reserva, opción o arras, entregando o percibiendo cantidades a cuenta; describir bienes y rectificar cabidas y linderos; subsanar discrepancias catastrales; realizar segregaciones, deslindes, divisiones, agrupaciones, declaraciones de obra nueva y constitución o modificación del régimen de propiedad horizontal que sean necesarios o convenientes; confesar el carácter privativo de los bienes adquiridos cuando proceda; declarar si la finca constituye o no vivienda habitual del/los otorgante(s).\n\nOtorgar y firmar cuantos documentos públicos o privados sean necesarios, incluyendo escrituras de subsanación o ratificación, hasta lograr la plena inscripción registral de los bienes adquiridos.",
+    en: "Purchase movable and immovable property located in Spanish territory, or undivided shares or any rights in rem thereover, freely setting price, conditions and payment terms; in case of deferred payment, to stipulate the relevant guarantees, including resolutory conditions, and to collect or cancel such guarantees in due course. Receive cheques in payment of the price or endorse them for deposit into account.\n\nAs preparatory or complementary acts: execute reservation, option or earnest money contracts, paying or receiving amounts on account; describe assets and correct measurements and boundaries; rectify cadastral discrepancies; carry out segregations, divisions, groupings, new construction declarations and constitution or modification of horizontal property regime as necessary or appropriate; declare the private nature of acquired assets where applicable; declare whether the property constitutes the habitual residence of the grantor(s).\n\nExecute and sign any public or private documents required, including rectification or ratification deeds, until full registration of the acquired assets is achieved."
+  },
+  F2: {
+    label: "Venta de bienes en España",
+    title_es: "VENTA DE BIENES EN ESPAÑA",
+    title_en: "SALE OF ASSETS IN SPAIN",
+    es: "Vender o transmitir, por cualquier título oneroso, bienes muebles e inmuebles situados en territorio español, o participaciones indivisas o cualquier derecho real sobre los mismos, a la persona o personas que el apoderado tenga por conveniente, fijando libremente precio, condiciones y forma de cobro; en caso de aplazamiento, estipular las garantías pertinentes, incluida la condición resolutoria, y cobrar el precio aplazado y cancelar las garantías en su día. Resolver y cancelar o ceder derechos derivados de contratos privados de compraventa de inmuebles, con los pactos y condiciones que estime conveniente, pudiendo abonar o recibir las cantidades correspondientes.\n\nComo actos preparatorios o complementarios: suscribir contratos de reserva, opción o arras; describir bienes y rectificar cabidas y linderos; subsanar discrepancias catastrales; realizar segregaciones, deslindes, divisiones, agrupaciones, declaraciones de obra nueva y constitución o modificación del régimen de propiedad horizontal que sean necesarios; constituir servidumbres; tramitar licencias de primera ocupación; gestionar los trámites administrativos derivados de la venta, incluyendo la presentación y liquidación de impuestos ante la Delegación de Hacienda y demás organismos competentes.\n\nOtorgar y firmar cuantos documentos públicos o privados sean necesarios, incluyendo escrituras de subsanación, ratificación o instancias de subsanación, hasta lograr la plena inscripción registral.",
+    en: "Sell or transfer, for valuable consideration, movable and immovable property located in Spanish territory, or undivided shares or any rights in rem thereover, to such person or persons as the attorney deems appropriate, freely setting price, conditions and collection terms; in case of deferred payment, to stipulate the relevant guarantees, including resolutory conditions, and to collect the deferred price and cancel guarantees in due course. Terminate, cancel or assign rights arising from private sale agreements for real property, under such terms and conditions as deemed appropriate, paying or receiving the corresponding amounts.\n\nAs preparatory or complementary acts: execute reservation, option or earnest money contracts; describe assets and correct measurements and boundaries; rectify cadastral discrepancies; carry out segregations, divisions, groupings, new construction declarations and constitution or modification of horizontal property regime as necessary; create easements; process first-occupation licences; manage all administrative formalities arising from the sale, including filing and settling taxes before the Tax Authority and other competent bodies.\n\nExecute and sign any public or private documents required, including rectification or ratification deeds, until full registration is achieved."
+  },
+  F3: {
+    label: "Cuentas bancarias en España",
+    title_es: "CUENTAS BANCARIAS EN ESPAÑA",
+    title_en: "BANK ACCOUNTS IN SPAIN",
+    es: "Abrir, operar, cancelar y liquidar cuentas bancarias de cualquier tipo en cualquier entidad financiera española. Expedir y endosar cheques; realizar disposiciones de efectivo, transferencias, domiciliaciones de pagos, cargos de recibos y facturas y cualesquiera otras operaciones ordinarias y extraordinarias. Solicitar y obtener certificados de saldo, de movimientos y cualesquiera otros relativos a las cuentas del/los otorgante(s) en España. Ordenar transferencias de todo tipo; firmar talones, órdenes y demás documentos bancarios; percibir intereses y cantidades en metálico; confirmar o impugnar saldos; cobrar cheques. Domiciliar y abonar toda clase de impuestos y pagos periódicos.",
+    en: "Open, operate, close and settle bank accounts of any kind at any Spanish financial institution. Issue and endorse cheques; make cash withdrawals, transfers, direct debits, receipt and invoice charges and any other ordinary or extraordinary operations. Request and obtain balance certificates, statements and any other certificates relating to the grantor's accounts in Spain. Order transfers of any kind; sign drafts, orders and other banking documents; collect interest and cash amounts; confirm or dispute balances; cash cheques. Arrange direct debits and payment of all taxes and periodic payments."
+  },
+  F4: {
+    label: "Préstamos hipotecarios",
+    title_es: "PRÉSTAMOS HIPOTECARIOS",
+    title_en: "MORTGAGE LOANS",
+    es: "Solicitar y recibir de cualquier entidad financiera, entidad privada o persona física o jurídica, préstamos por el importe que considere conveniente y bajo las condiciones y tipo de interés que libremente pacte, constituyendo hipoteca en garantía de su devolución. Recibir de la entidad prestamista la Ficha Europea de Información Normalizada (FEIN), la Ficha de Advertencias Estandarizadas (FIAE) y toda la demás documentación precontractual legalmente exigible; elegir notario para la formalización y comparecer ante él para plantear las cuestiones que estime oportunas e instar la autorización del acta de asesoramiento previo conforme al artículo 15 de la Ley 5/2019, de 15 de marzo, reguladora de los contratos de crédito inmobiliario. Pactar libremente todas las condiciones del préstamo hipotecario, distribuir la responsabilidad hipotecaria, subrogarse en hipotecas ya constituidas, formalizar novaciones o subrogaciones hipotecarias. Prestar fianzas o avales; constituir hipotecas en garantía de deudas de terceros. Modificar y cancelar hipotecas y demás garantías reales. Suscribir cuantas declaraciones, manuscritas o no, exija la legislación vigente o la entidad acreedora.",
+    en: "Apply for and receive from any financial institution, private entity or natural or legal person, loans for such amount and under such conditions and interest rate as freely agreed, securing repayment by mortgage. Receive from the lending institution the European Standardised Information Sheet (ESIS/FEIN), the FIAE and all other legally required pre-contractual documentation; choose a notary for the formalisation and appear before them to raise any queries and request authorisation of the prior advisory deed pursuant to Article 15 of Act 5/2019 of 15 March, regulating real estate credit agreements. Freely agree all mortgage loan conditions, allocate mortgage liability, subrogate into existing mortgages, and formalise novations or mortgage subrogations. Provide guarantees or sureties; create mortgages to secure third-party debts. Modify and cancel mortgages and other real securities. Sign any declarations, handwritten or otherwise, required by applicable legislation or the creditor institution."
+  },
+  F5: {
+    label: "Constitución de sociedades en España",
+    title_es: "CONSTITUCIÓN DE SOCIEDADES EN ESPAÑA",
+    title_en: "INCORPORATION OF COMPANIES IN SPAIN",
+    es: "Constituir sociedades de toda naturaleza, civil o mercantil, bajo la denominación, objeto, domicilio, duración, capital, estatutos y demás circunstancias que considere oportunas; suscribir participaciones sociales o acciones mediante aportaciones dinerarias y no dinerarias; aprobar los correspondientes estatutos con designación de cargos; aceptar el cargo de administrador en sociedades mercantiles, manifestando no estar incurso en ninguna de las incompatibilidades previstas en la Ley 12/1995, de 11 de mayo, ni en ninguna otra análoga.\n\nComprar y vender acciones y participaciones de cualquier sociedad. Realizar ampliaciones de capital con aportaciones dinerarias y no dinerarias. Celebrar Juntas Generales Ordinarias y Extraordinarias. Nombrar o cesar administradores; elevar a público cualesquiera actos societarios; aprobar cuentas anuales; operar con bancos; dar y tomar dinero en préstamo. Ejercitar todos los derechos y obligaciones inherentes a la condición de socio: asistir a Juntas con derecho de voz y voto, percibir dividendos, disolver y liquidar entidades, nombrar liquidadores y cualesquiera otras facultades legal o estatutariamente delegables.\n\nSolicitar el C.I.F. de las sociedades constituidas o adquiridas y realizar todas las gestiones con la Agencia Tributaria, inclusive el nombramiento de representantes fiscales y la actuación telemática en la sede electrónica de la A.E.A.T., pudiendo: (1) interponer recursos o reclamaciones, desistir, renunciar derechos, asumir obligaciones y solicitar devoluciones de ingresos indebidos en los procedimientos regulados en los títulos III, IV y V de la Ley 58/2003, de 17 de diciembre, General Tributaria; (2) consultar datos personales; (3) recibir notificaciones electrónicas; (4) pagar deudas gestionadas por la A.E.A.T. mediante adeudos directos en cuentas del/los otorgante(s).\n\nOtorgar y firmar cuantos documentos públicos o privados sean necesarios o convenientes para el ejercicio de las facultades anteriores.",
+    en: "Incorporate companies of any nature, civil or commercial, determining the name, corporate purpose, registered address, duration, share capital, articles of association and any other terms deemed appropriate; subscribe shares or participations through monetary or non-monetary contributions; approve the corresponding articles of association with appointment of officers; accept appointment as director of commercial companies, declaring the absence of any incompatibilities under Act 12/1995 of 11 May or any analogous legislation.\n\nPurchase and sell shares and participations in any company. Carry out capital increases through monetary and non-monetary contributions. Hold Ordinary and Extraordinary General Meetings. Appoint or remove directors; execute public deeds of corporate resolutions; approve annual accounts; operate bank accounts; lend and borrow money. Exercise all rights and obligations as a shareholder: attend General Meetings with voting rights, receive dividends, dissolve and wind up entities, appoint liquidators and any other rights or duties delegable under law or the articles.\n\nApply for the C.I.F. of companies incorporated or acquired and carry out all dealings with the Tax Agency (A.E.A.T.), including the appointment of tax representatives and electronic actions through the A.E.A.T. portal, including: (1) filing appeals or claims, withdrawing from proceedings, waiving rights, assuming obligations and requesting refunds of undue payments under Titles III, IV and V of General Tax Act 58/2003 of 17 December; (2) accessing personal data records; (3) receiving electronic notifications; (4) paying debts managed by the A.E.A.T. through direct debits from the grantor's accounts.\n\nExecute and sign any public or private documents necessary or appropriate for the exercise of the foregoing powers."
+  },
+  F6: {
+    label: "Facultades sucesorias",
+    title_es: "FACULTADES SUCESORIAS",
+    title_en: "INHERITANCE POWERS",
+    es: "Manifestar, aceptar o repudiar, pura y simplemente o a beneficio de inventario, herencias testadas e intestadas, legados y donaciones mortis causa en que tenga interés el/los otorgante(s). Solicitar copias de testamentos y demás certificaciones; instar y otorgar Actas de Notoriedad para Declaración de Herederos Ab-intestato; hacer, aprobar o impugnar particiones de herencia y liquidaciones de sociedad conyugal; practicar inventarios, avalúos, tasaciones y divisiones; tomar posesión de los bienes adjudicados; adjudicar bienes en pago de deudas; cobrar o pagar excesos o defectos de adjudicación; entregar y recibir legados; nombrar peritos y contadores-partidores; ceder onerosamente derechos hereditarios.\n\nRetirar saldos, valores y efectos de la masa hereditaria depositados en bancos, cajas de ahorro y demás entidades financieras públicas o privadas; cobrar seguros de vida y pólizas de cualquier naturaleza a nombre del causante; operar con cuentas bancarias abiertas a nombre del causante a efectos de liquidar la herencia; cancelar registralmente hipotecas que graven bienes de la herencia.\n\nLiquidar y pagar todos los impuestos derivados de la herencia ante la Administración Tributaria estatal, autonómica y local; solicitar prórrogas, liquidaciones provisionales, devoluciones y certificaciones; nombrar y designar representantes fiscales en España.\n\nInscribir bienes y documentos en los Registros públicos correspondientes; describir bienes, rectificar cabidas y linderos; realizar segregaciones, agrupaciones, divisiones y declaraciones de obra nueva que sean necesarias. Otorgar y firmar cuantos documentos públicos o privados sean necesarios o convenientes para la completa tramitación y terminación de las operaciones particionales.",
+    en: "Declare, accept or repudiate, purely and simply or under benefit of inventory, testate and intestate inheritances, legacies and mortis causa gifts in which the grantor(s) have an interest. Request copies of wills and other certificates; promote and execute Notarial Acts of Notoriety for Declaration of Heirs ab intestato; make, approve or contest inheritance partitions and matrimonial property liquidations; carry out inventories, valuations, appraisals and divisions; take possession of assets awarded; assign assets in payment of debts; collect or pay excesses or shortfalls in adjudication; deliver and receive legacies; appoint experts and partitioners; assign hereditary rights for consideration.\n\nWithdraw balances, securities and assets from the estate held at banks, savings banks and other public or private financial institutions; collect life insurance and policies of any nature held in the name of the deceased; operate bank accounts held in the name of the deceased for the purpose of settling the estate; cancel mortgages encumbering estate assets at the Land Registry.\n\nSettle and pay all taxes arising from the inheritance before the State, regional and local Tax Authorities; request extensions, provisional assessments, refunds and certificates; appoint and designate tax representatives in Spain.\n\nRegister assets and documents at the relevant public registries; describe assets, correct measurements and boundaries; carry out segregations, groupings, divisions and new construction declarations as required. Execute and sign any public or private documents necessary or appropriate for the full processing and completion of the partition proceedings."
+  },
+  F7: {
+    label: "Obligaciones tributarias",
+    title_es: "OBLIGACIONES TRIBUTARIAS",
+    title_en: "TAX OBLIGATIONS",
+    es: "Representar al/los otorgante(s) ante la Agencia Estatal de Administración Tributaria y las Administraciones Tributarias autonómicas y locales. Presentar y firmar autoliquidaciones, declaraciones y demás documentos tributarios; pagar impuestos; solicitar y obtener certificados, devoluciones y certificaciones de Renta y Patrimonio; solicitar prórrogas y liquidaciones provisionales; reclamar contra valoraciones y liquidaciones; interponer recursos en vías administrativa y económico-administrativa; recibir notificaciones y contestarlas; gestionar la tramitación del modelo 210 (IRNR) y demás modelos aplicables a no residentes; recibir transferencias de devoluciones a favor del/los otorgante(s).\n\nActuar ante la A.E.A.T. en los términos del artículo 46 de la Ley 58/2003, de 17 de diciembre, General Tributaria, y en particular realizar los trámites habilitados por internet conforme al artículo 46.2 de dicha Ley, pudiendo: (1) interponer recursos o reclamaciones, desistir, renunciar derechos, asumir obligaciones y solicitar devoluciones de ingresos indebidos en los procedimientos regulados en los títulos III, IV y V de la citada Ley; (2) consultar datos personales; (3) recibir notificaciones electrónicas; (4) pagar deudas gestionadas por la A.E.A.T. mediante adeudos directos en cuentas del/los otorgante(s).\n\nNombrar y designar representantes fiscales en España. Domiciliar el pago de toda clase de impuestos y tasas.",
+    en: "Represent the grantor(s) before the Spanish State Tax Agency and the regional and local tax authorities. File and sign self-assessments, declarations and other tax documents; pay taxes; request and obtain certificates, refunds and income and wealth tax certificates; request extensions and provisional assessments; contest valuations and assessments; file appeals in administrative and economic-administrative proceedings; receive and respond to notifications; manage Form 210 (IRNR) and other forms applicable to non-residents; receive refund transfers in favour of the grantor(s).\n\nAct before the A.E.A.T. under the terms of Article 46 of General Tax Act 58/2003 of 17 December, and in particular carry out proceedings enabled online pursuant to Article 46.2 of said Act, including: (1) filing appeals or claims, withdrawing from proceedings, waiving rights, assuming obligations and requesting refunds of undue payments under Titles III, IV and V of said Act; (2) accessing personal data records; (3) receiving electronic notifications; (4) paying debts managed by the A.E.A.T. through direct debits from the grantor's accounts.\n\nAppoint and designate tax representatives in Spain. Arrange direct debit payment of all taxes and duties."
+  },
+  F8: {
+    label: "Administración Pública y Registros",
+    title_es: "ADMINISTRACIÓN PÚBLICA Y REGISTROS",
+    title_en: "PUBLIC ADMINISTRATION AND REGISTERS",
+    es: "Representar al/los otorgante(s) ante toda clase de organismos de la Administración Central, Autonómica o Local, y en especial ante la Dirección General de Economía Internacional y Transacciones Exteriores, a efectos de autorizaciones y verificaciones para la inversión de capital extranjero. Comparecer ante autoridades españolas de cualquier orden; emitir, recibir y firmar toda clase de declaraciones y solicitudes; presentar y retirar documentos y certificados; recibir notificaciones y contestarlas; interponer recursos administrativos y contencioso-administrativos.\n\nInscribir, modificar y cancelar asientos en el Registro de la Propiedad y en el Catastro; solicitar certificaciones registrales y catastrales; instar expedientes de dominio, actas de notoriedad e inmatriculaciones; tramitar licencias de primera ocupación, declaraciones de obra nueva y cualesquiera otros expedientes urbanísticos. Describir bienes y rectificar cabidas y linderos; otorgar escrituras de subsanación o ratificación hasta lograr la plena inscripción registral de los bienes.\n\nDirigir y contestar requerimientos notariales o privados; levantar todo tipo de actas notariales; pedir copias autorizadas de escrituras y certificados en cualquier Registro público.",
+    en: "Represent the grantor(s) before all Central, Regional or Local Government bodies, and in particular before the Directorate-General for International Economics and Foreign Transactions, for the purposes of authorisations and verifications relating to foreign capital investment. Appear before Spanish authorities of any kind; issue, receive and sign all types of declarations and applications; submit and collect documents and certificates; receive and respond to notifications; file administrative and judicial-administrative appeals.\n\nRegister, modify and cancel entries at the Land Registry and the Cadastre; request registry and cadastral certificates; initiate dominion proceedings, notarial acts of notoriety and first registrations; process first-occupation licences, new construction declarations and any other planning proceedings. Describe assets and correct measurements and boundaries; execute rectification or ratification deeds until full registration of assets is achieved.\n\nIssue and respond to notarial or private requirements; draw up all types of notarial acts; request authorised copies of deeds and certificates from any public Registry."
+  },
+  F9: {
+    label: "Servicios y suministros",
+    title_es: "SERVICIOS Y SUMINISTROS",
+    title_en: "SERVICES AND UTILITIES",
+    es: "Contratar, modificar, subrogar y cancelar contratos de suministros de cualquier clase en España, incluidos electricidad, agua, gas, butano, telefonía, internet y cualquier otro servicio asociado a los inmuebles del/los otorgante(s). Solicitar altas, bajas y cambios de titularidad; domiciliar pagos; pagar facturas y recibos periódicos.\n\nContratar con las empresas que considere conveniente la prestación de servicios necesarios para el ejercicio de las facultades contenidas en este poder, incluyendo servicios de gestoría para trámites administrativos, asesoría y representación fiscal, servicios legales especializados y cualesquiera otros. Autorizar expresamente la cesión de los datos del/los otorgante(s) que sea necesaria para que dichas empresas puedan prestar sus servicios adecuadamente.",
+    en: "Contract, modify, subrogate and cancel utility contracts of any kind in Spain, including electricity, water, gas, telephone, internet and any other service associated with the grantor's properties. Request connections, disconnections and changes of holder; arrange direct debits; pay periodic bills and receipts.\n\nEngage such companies as deemed appropriate for the provision of services necessary for the exercise of the powers contained in this deed, including administrative management services, tax advisory and representation, specialised legal services and any others. Expressly authorise the transfer of the grantor's data as necessary for such companies to provide their services adequately."
+  },
+  F10: {
+    label: "Seguros",
+    title_es: "SEGUROS",
+    title_en: "INSURANCE",
+    es: "Contratar, modificar, renovar y cancelar pólizas de seguro de cualquier clase y naturaleza sobre los bienes adquiridos o de titularidad del/los otorgante(s), con las cláusulas, pactos y condiciones que tenga a bien estipular; pagar las primas correspondientes; cobrar indemnizaciones y prestaciones derivadas de siniestros; representar al/los otorgante(s) frente a las compañías aseguradoras en cualesquiera reclamaciones, negociaciones o procedimientos.",
+    en: "Contract, modify, renew and cancel insurance policies of any kind and nature covering the assets acquired or owned by the grantor(s), under such clauses, terms and conditions as deemed appropriate; pay the corresponding premiums; collect indemnities and benefits arising from claims; represent the grantor(s) before insurance companies in any claims, negotiations or proceedings."
+  },
+  F11: {
+    label: "NIE y certificado digital (persona física)",
+    title_es: "NIE Y CERTIFICADO DIGITAL",
+    title_en: "NIE AND DIGITAL CERTIFICATE",
+    es: "Solicitar, obtener y recoger el Número de Identidad de Extranjero (NIE) del/los otorgante(s) ante los organismos competentes.\n\nSolicitar, descargar, instalar, renovar, suspender, revocar y utilizar cualesquiera certificados de firma electrónica emitidos por la Fábrica Nacional de Moneda y Timbre-Real Casa de la Moneda (FNMT-RCM) o por otros prestadores de servicios de certificación, incluyendo certificados de persona física, de representante de persona jurídica, de dispositivo móvil y cualesquiera otros. Utilizar dichos certificados ante la Administración General del Estado, Comunidades Autónomas, Entidades Locales y sus organismos públicos, Registros Públicos, Agencias Tributarias, Notarías, Colegios Profesionales, Tribunales, Organismos de la UE e internacionales, y ante personas físicas y jurídicas de derecho privado, para la realización telemática de cualesquiera de las facultades contenidas en el presente poder.\n\nActuar ante los organismos de la Hacienda Pública en los términos del artículo 46 de la Ley 58/2003, de 17 de diciembre, General Tributaria, y realizar los trámites habilitados por internet conforme al artículo 46.2 de dicha Ley.",
+    en: "Apply for, obtain and collect the Foreigner Identification Number (NIE) of the grantor(s) before the competent authorities.\n\nApply for, download, install, renew, suspend, revoke and use any electronic signature certificates issued by the Spanish Royal Mint (FNMT-RCM) or other certification service providers, including certificates for natural persons, representatives of legal entities, mobile devices and any others. Use such certificates before the State General Administration, Regional Governments, Local Authorities and their public bodies, Public Registries, Tax Agencies, Notaries, Professional Associations, Courts, EU and international bodies, and before private individuals and legal entities, for the electronic performance of any of the powers contained in this deed.\n\nAct before the Tax Authorities under the terms of Article 46 of General Tax Act 58/2003 of 17 December, and carry out proceedings enabled online pursuant to Article 46.2 of said Act."
+  },
+  F12: {
+    label: "NIF de la sociedad",
+    title_es: "NIF DE LA SOCIEDAD",
+    title_en: "COMPANY TAX NUMBER (NIF)",
+    es: "Solicitar, obtener y recoger el Número de Identificación Fiscal (NIF) de la sociedad otorgante o de la sociedad española que se constituya ante la Agencia Estatal de Administración Tributaria, así como realizar todas las gestiones necesarias para su obtención, modificación o renovación, y otorgar poder para la realización por medios telemáticos de los trámites correspondientes en la sede electrónica de la A.E.A.T.",
+    en: "Apply for, obtain and collect the Tax Identification Number (NIF) of the granting company or of the Spanish company to be incorporated before the Spanish Tax Agency, as well as carry out all necessary steps for its obtaining, amendment or renewal, and grant power for the electronic performance of the corresponding formalities through the A.E.A.T. online portal."
+  }
+};
+
+const PROFILES = {
+  compra_persona: {
+    label: "Compra - persona física",
+    title_es: "COMPRA",
+    title_en: "PURCHASE",
+    comparecencia: ["A", "B"],
+    entity: null,
+    modules: ["F1","F3","F4","F7","F8","F9","F11"]
+  },
+  compra_sociedad: {
+    label: "Compra - sociedad danesa",
+    title_es: "COMPRA",
+    title_en: "PURCHASE",
+    comparecencia: ["D", "E"],
+    entity: "sociedad",
+    modules: ["F1","F3","F4","F7","F8","F9","F11","F12"]
+  },
+  venta_persona: {
+    label: "Venta - persona física",
+    title_es: "VENTA",
+    title_en: "SALE",
+    comparecencia: ["A", "B"],
+    entity: null,
+    modules: ["F2","F3","F7","F8","F9","F10","F11"]
+  },
+  venta_sociedad: {
+    label: "Venta - sociedad danesa",
+    title_es: "VENTA",
+    title_en: "SALE",
+    comparecencia: ["D", "E"],
+    entity: "sociedad",
+    modules: ["F2","F3","F7","F8","F9","F10","F11","F12"]
+  },
+  herencia_persona: {
+    label: "Herencia - persona física",
+    title_es: "VENTA Y SUCESIONES",
+    title_en: "SALE AND INHERITANCE",
+    comparecencia: ["A", "C"],
+    entity: null,
+    modules: ["F6","F2","F3","F7","F8","F11"]
+  },
+  herencia_fundacion: {
+    label: "Herencia - fundación danesa",
+    title_es: "VENTA Y SUCESIONES",
+    title_en: "SALE AND INHERITANCE",
+    comparecencia: ["F"],
+    entity: "fundacion",
+    modules: ["F6","F2","F3","F7","F8","F11"]
+  },
+  establishment: {
+    label: "Constitución de sociedad española",
+    title_es: "CONSTITUCIÓN DE SOCIEDAD",
+    title_en: "INCORPORATION OF COMPANY",
+    comparecencia: ["D", "E"],
+    entity: "sociedad",
+    modules: ["F5","F7","F8","F11","F12"]
+  }
+};
+
+const COMPARECENCIA_PEOPLE = {
+  A: { min: 1, max: 1 },
+  B: { min: 2, max: 2 },
+  C: { min: 2, max: 10 },
+  D: { min: 1, max: 1 },
+  E: { min: 2, max: 5 },
+  F: { min: 1, max: 3 }
+};
+
+// ============================================================
+// UI i18n - Danish (default) and English
+// ============================================================
+let currentLang = 'da';
+
+const UI_I18N = {
+  da: {
+    eyebrow: "Kirk Larsen & Ascanius - Notarial Power Generator",
+    title: "Notarialfuldmagtsgenerator",
+    subtitle: "Tosproget skabelon på spansk og engelsk. Eksporterer til .docx klar til notarunderskrift.",
+    sec_type: "1. Type fuldmagt",
+    sec_appear: "2. Fremmøde",
+    sec_local: "Lokal fuldmægtig",
+    sec_powers: "Beføjelser",
+    sec_nie: "NIE-konsulent (valgfri)",
+    sec_doc: "Fuldmagtens gyldighed",
+    lbl_profile: "Profil",
+    lbl_appearance: "Type fremmødte",
+    lbl_title: "Titel",
+    lbl_fullname: "Fulde navn",
+    lbl_nationality: "Nationalitet",
+    lbl_profession: "Erhverv",
+    lbl_marital: "Civilstand",
+    lbl_doctype: "Dokumenttype",
+    lbl_docnum: "Dokumentnummer",
+    lbl_profaddr: "Professionel adresse",
+    lbl_passport: "Passnummer",
+    lbl_cpr: "CPR-nummer",
+    lbl_address: "Adresse (gade og nr.)",
+    lbl_postal: "Postnummer",
+    lbl_dkcity: "By (Danmark)",
+    lbl_city: "By (sted for udstedelse)",
+    lbl_date: "Dato",
+    lbl_validity: "Gyldighed",
+    lbl_validity_indef: "Tidsubegrænset",
+    lbl_validity_date: "Indtil dato",
+    lbl_validity_until: "Gyldig indtil",
+    lbl_nie_enable: "Inkludér særlig beføjelse til konsulenten for NIE-ansøgning",
+    lbl_company_name: "Selskabsnavn (incl. ApS / A/S)",
+    lbl_inc_date: "Stiftelsesdato",
+    lbl_cvr: "CVR-nummer (Danish Business Register)",
+    lbl_reg_addr: "Fuldstændig hjemstedsadresse",
+    lbl_ubo: "Reelle ejere (>25%) - adskilt med komma",
+    lbl_foundation_name: "Fondens navn",
+    lbl_foundation_reg: "Registreringsnummer",
+    lbl_position: "Stilling for fremmødte",
+    lbl_purpose: "Fondens formål",
+    help_local: "Tredje fuldmægtig, varierer efter sted. Bárbara Román og Michael Appel tilføjes automatisk.",
+    help_powers: "Standardbeføjelserne kommer fra den valgte profil. Du kan tilføje eller fjerne efter behov.",
+    help_doc: "By og dato tilføjes af notaren. Angiv kun en slutdato, hvis fuldmagten ikke skal være tidsubegrænset.",
+    btn_preview: "Forhåndsvisning",
+    btn_generate: "Generér .docx",
+    btn_add_person: "+ Tilføj fremmødte",
+    btn_remove: "Slet",
+    person_n: "Fremmødte",
+    entity_company_title: "3. Oplysninger om det danske selskab",
+    entity_foundation_title: "3. Oplysninger om den danske fond",
+    opt_passport: "Pas",
+    profile_placeholder: "- Vælg en profil -",
+    profile_compra_persona: "Køb - fysisk person",
+    profile_compra_sociedad: "Køb - dansk selskab",
+    profile_venta_persona: "Salg - fysisk person",
+    profile_venta_sociedad: "Salg - dansk selskab",
+    profile_herencia_persona: "Arv - fysisk person",
+    profile_herencia_fundacion: "Arv - dansk fond",
+    profile_establishment: "Stiftelse af spansk selskab",
+    comp_A: "A - Fysisk person, enkelt",
+    comp_B: "B - Par (ægteskab eller andet partnerskab)",
+    comp_C: "C - Flere personer (medarvinger, partnere)",
+    comp_D: "D - Eneste direktør i dansk selskab",
+    comp_E: "E - Flere direktører i dansk selskab",
+    comp_F: "F - Direktør(er) i dansk fond",
+    mod_F1: "Køb af aktiver i Spanien",
+    mod_F2: "Salg af aktiver i Spanien",
+    mod_F3: "Spanske bankkonti",
+    mod_F4: "Realkreditlån",
+    mod_F5: "Stiftelse af spanske selskaber",
+    mod_F6: "Arvebeføjelser",
+    mod_F7: "Skattepligter",
+    mod_F8: "Offentlig forvaltning og registre",
+    mod_F9: "Forsyninger",
+    mod_F10: "Forsikring",
+    mod_F11: "NIE og digitalt certifikat (fysisk person)",
+    mod_F12: "Selskabets NIF",
+    warn_profile: "Profil mangler",
+    warn_person: "Fremmødte mangler",
+    warn_person_n: "Fremmødte {n}: navn",
+    warn_local: "Lokal fuldmægtig navn mangler",
+    warn_city: "By mangler",
+    warn_date: "Dato mangler",
+    status_generating: "Genererer .docx...",
+    status_downloaded: "Hentet: ",
+    status_warnings: "Advarsler: ",
+    status_error: "Fejl: ",
+    ph_fullname: "Fulde navn",
+    ph_nationality_es: "f.eks. dansk, spansk",
+    ph_profession: "f.eks. advokat, ingeniør",
+    ph_marital: "f.eks. casado, soltera, divorciado",
+    ph_profaddr: "Gade, postnr. by, land"
+  },
+  en: {
+    eyebrow: "Kirk Larsen & Ascanius - Notarial Power Generator",
+    title: "Notarial Power Generator",
+    subtitle: "Bilingual Spanish / English template. Exports to .docx ready for notarial signature.",
+    sec_type: "1. Type of power",
+    sec_appear: "2. Appearance",
+    sec_local: "Local attorney",
+    sec_powers: "Powers",
+    sec_nie: "NIE agent (optional)",
+    sec_doc: "Validity of the power",
+    lbl_profile: "Profile",
+    lbl_appearance: "Appearance type",
+    lbl_title: "Title",
+    lbl_fullname: "Full name",
+    lbl_nationality: "Nationality",
+    lbl_profession: "Profession",
+    lbl_marital: "Marital status",
+    lbl_doctype: "Document type",
+    lbl_docnum: "Document no.",
+    lbl_profaddr: "Professional address",
+    lbl_passport: "Passport no.",
+    lbl_cpr: "Danish CPR no.",
+    lbl_address: "Address (street and no.)",
+    lbl_postal: "Postal code",
+    lbl_dkcity: "City (Denmark)",
+    lbl_city: "City (place of issue)",
+    lbl_date: "Date",
+    lbl_validity: "Validity",
+    lbl_validity_indef: "Indefinite",
+    lbl_validity_date: "Until date",
+    lbl_validity_until: "Valid until",
+    lbl_nie_enable: "Include express power to the agent for NIE processing",
+    lbl_company_name: "Company name (incl. ApS / A/S)",
+    lbl_inc_date: "Date of incorporation",
+    lbl_cvr: "Danish Business Register no.",
+    lbl_reg_addr: "Full registered address",
+    lbl_ubo: "Beneficial owners (>25%) - comma separated",
+    lbl_foundation_name: "Foundation name",
+    lbl_foundation_reg: "Registration number",
+    lbl_position: "Position of appearer(s)",
+    lbl_purpose: "Foundation purpose",
+    help_local: "Third attorney, varies by location. Bárbara Román and Michael Appel are added automatically.",
+    help_powers: "Default powers come from the selected profile. You can add or remove as needed.",
+    help_doc: "City and date are added by the notary. Only set an end date if the power is not intended to be indefinite.",
+    btn_preview: "Preview",
+    btn_generate: "Generate .docx",
+    btn_add_person: "+ Add appearer",
+    btn_remove: "Remove",
+    person_n: "Appearer",
+    entity_company_title: "3. Danish company details",
+    entity_foundation_title: "3. Danish foundation details",
+    opt_passport: "Passport",
+    profile_placeholder: "- Select a profile -",
+    profile_compra_persona: "Purchase - individual",
+    profile_compra_sociedad: "Purchase - Danish company",
+    profile_venta_persona: "Sale - individual",
+    profile_venta_sociedad: "Sale - Danish company",
+    profile_herencia_persona: "Inheritance - individual",
+    profile_herencia_fundacion: "Inheritance - Danish foundation",
+    profile_establishment: "Incorporation of Spanish company",
+    comp_A: "A - Individual, single",
+    comp_B: "B - Couple (marriage or partnership)",
+    comp_C: "C - Multiple persons (co-heirs, partners)",
+    comp_D: "D - Sole director of Danish company",
+    comp_E: "E - Multiple directors of Danish company",
+    comp_F: "F - Director(s) of Danish foundation",
+    mod_F1: "Purchase of assets in Spain",
+    mod_F2: "Sale of assets in Spain",
+    mod_F3: "Spanish bank accounts",
+    mod_F4: "Mortgage loans",
+    mod_F5: "Incorporation of Spanish companies",
+    mod_F6: "Inheritance powers",
+    mod_F7: "Tax obligations",
+    mod_F8: "Public administration and registers",
+    mod_F9: "Utilities",
+    mod_F10: "Insurance",
+    mod_F11: "NIE and digital certificate (individual)",
+    mod_F12: "Company NIF",
+    warn_profile: "Profile missing",
+    warn_person: "Appearer missing",
+    warn_person_n: "Appearer {n}: name",
+    warn_local: "Local attorney name missing",
+    warn_city: "City missing",
+    warn_date: "Date missing",
+    status_generating: "Generating .docx...",
+    status_downloaded: "Downloaded: ",
+    status_warnings: "Warnings: ",
+    status_error: "Error: ",
+    ph_fullname: "Full name",
+    ph_nationality_es: "e.g. Danish, Spanish",
+    ph_profession: "e.g. lawyer, engineer",
+    ph_marital: "e.g. casado, soltera, divorciado",
+    ph_profaddr: "Street, postal code city, country"
+  }
+};
+
+function t(key) {
+  return (UI_I18N[currentLang] && UI_I18N[currentLang][key]) || key;
+}
+
+function applyI18n() {
+  // Preservar valores de selects antes de re-render
+  const savedVigencia = document.getElementById('doc_vigencia_tipo')?.value || 'indef';
+
+  // Static text
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  // Select options with i18n
+  document.querySelectorAll('[data-i18n-opt]').forEach(el => {
+    el.textContent = t(el.dataset.i18nOpt);
+  });
+  // Placeholders
+  document.querySelectorAll('[data-ph]').forEach(el => {
+    el.placeholder = t(el.dataset.ph);
+  });
+  // Re-render dynamic
+  renderProfileOptions();
+  renderComparecenciaOptions();
+  renderPeople();
+  if (state.profile && PROFILES[state.profile].entity) renderEntity();
+  renderModules();
+
+  // Restaurar valores de selects tras re-render
+  const vigEl = document.getElementById('doc_vigencia_tipo');
+  if (vigEl) {
+    vigEl.value = savedVigencia;
+    document.getElementById('vigencia-date-wrap')?.classList.toggle('hidden', savedVigencia !== 'fecha');
+  }
+}
+
+function renderProfileOptions() {
+  const sel = document.getElementById('profile');
+  const current = sel.value;
+  const profileKeys = ['compra_persona','compra_sociedad','venta_persona','venta_sociedad','herencia_persona','herencia_fundacion','establishment'];
+  sel.innerHTML = `<option value="">${t('profile_placeholder')}</option>` +
+    profileKeys.map(k => `<option value="${k}">${t('profile_'+k)}</option>`).join("");
+  sel.value = current;
+}
+
+function renderComparecenciaOptions() {
+  if (!state.profile) return;
+  const sel = document.getElementById('comparecencia');
+  const profile = PROFILES[state.profile];
+  const current = sel.value || state.comparecencia;
+  sel.innerHTML = profile.comparecencia.map(c => `<option value="${c}">${t('comp_'+c)}</option>`).join("");
+  if (current) sel.value = current;
+}
+
+// ============================================================
+// UI - State and rendering
+// ============================================================
+
+const $ = (id) => document.getElementById(id);
+const state = {
+  profile: null,
+  comparecencia: null,
+  people: [],
+  modules: new Set()
+};
+
+function newPerson() {
+  return {
+    tratamiento: "Don",
+    nombre: "",
+    estado_civil: "",
+    profesion: "",
+    pasaporte: "",
+    direccion_dk: "",
+    cp_dk: "",
+    ciudad_dk: ""
+  };
+}
+
+function renderPeople() {
+  const container = $("people-container");
+  container.innerHTML = "";
+  if (!state.comparecencia) return;
+  const { min, max } = COMPARECENCIA_PEOPLE[state.comparecencia];
+
+  state.people.forEach((p, i) => {
+    const div = document.createElement("div");
+    div.className = "person-block";
+    div.innerHTML = `
+      <h3>${t('person_n')} ${i + 1}${state.people.length > min ? ` <button type="button" data-rm="${i}" class="secondary" style="float:right;padding:2px 10px;font-size:12px">${t('btn_remove')}</button>` : ""}</h3>
+      <div class="grid-2">
+        <div>
+          <label>${t('lbl_title')}</label>
+          <select data-field="tratamiento" data-i="${i}">
+            <option value="Don" ${p.tratamiento==="Don"?"selected":""}>Don</option>
+            <option value="Doña" ${p.tratamiento==="Doña"?"selected":""}>Doña</option>
+          </select>
+        </div>
+        <div>
+          <label>${t('lbl_fullname')}</label>
+          <input type="text" data-field="nombre" data-i="${i}" value="${p.nombre}">
+        </div>
+        <div>
+          <label>${t('lbl_marital')}</label>
+          <input type="text" data-field="estado_civil" data-i="${i}" value="${p.estado_civil}" placeholder="soltero/a, casado/a, divorciado/a, viudo/a">
+        </div>
+        <div>
+          <label>${t('lbl_profession')}</label>
+          <input type="text" data-field="profesion" data-i="${i}" value="${p.profesion}">
+        </div>
+        <div>
+          <label>${t('lbl_passport')}</label>
+          <input type="text" data-field="pasaporte" data-i="${i}" value="${p.pasaporte}">
+        </div>
+        <div>
+          <label>${t('lbl_address')}</label>
+          <input type="text" data-field="direccion_dk" data-i="${i}" value="${p.direccion_dk}">
+        </div>
+        <div>
+          <label>${t('lbl_postal')}</label>
+          <input type="text" data-field="cp_dk" data-i="${i}" value="${p.cp_dk}">
+        </div>
+        <div>
+          <label>${t('lbl_dkcity')}</label>
+          <input type="text" data-field="ciudad_dk" data-i="${i}" value="${p.ciudad_dk}">
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+
+  container.querySelectorAll("[data-field]").forEach(el => {
+    el.addEventListener("input", (e) => {
+      const i = parseInt(e.target.dataset.i);
+      state.people[i][e.target.dataset.field] = e.target.value;
+    });
+  });
+  container.querySelectorAll("[data-rm]").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const i = parseInt(e.target.dataset.rm);
+      state.people.splice(i, 1);
+      renderPeople();
+    });
+  });
+
+  $("add-person").classList.toggle("hidden", state.people.length >= max);
+}
+
+function renderEntity() {
+  const profile = PROFILES[state.profile];
+  const sec = $("section-entity");
+  const fields = $("entity-fields");
+  if (!profile || !profile.entity) {
+    sec.classList.add("hidden");
+    return;
+  }
+  sec.classList.remove("hidden");
+
+  // Preserve previous values across re-render
+  const prev = {
+    e_nombre: document.getElementById('e_nombre')?.value || '',
+    e_fecha: document.getElementById('e_fecha')?.value || '',
+    e_registro: document.getElementById('e_registro')?.value || '',
+    e_direccion: document.getElementById('e_direccion')?.value || '',
+    e_titulares: document.getElementById('e_titulares')?.value || '',
+    e_cargo: document.getElementById('e_cargo')?.value || '',
+    e_finalidad: document.getElementById('e_finalidad')?.value || ''
+  };
+
+  if (profile.entity === "sociedad") {
+    $("entity-title").textContent = t('entity_company_title');
+    fields.innerHTML = `
+      <div class="grid-2">
+        <div>
+          <label>${t('lbl_company_name')}</label>
+          <input type="text" id="e_nombre" value="${prev.e_nombre}">
+        </div>
+        <div>
+          <label>${t('lbl_inc_date')}</label>
+          <input type="date" id="e_fecha" value="${prev.e_fecha}">
+        </div>
+        <div>
+          <label>${t('lbl_cvr')}</label>
+          <input type="text" id="e_registro" value="${prev.e_registro}">
+        </div>
+        <div>
+          <label>${t('lbl_reg_addr')}</label>
+          <input type="text" id="e_direccion" value="${prev.e_direccion}">
+        </div>
+        <div style="grid-column:1/-1">
+          <label>${t('lbl_ubo')}</label>
+          <input type="text" id="e_titulares" value="${prev.e_titulares}">
+        </div>
+      </div>
+    `;
+  } else if (profile.entity === "fundacion") {
+    $("entity-title").textContent = t('entity_foundation_title');
+    fields.innerHTML = `
+      <div class="grid-2">
+        <div>
+          <label>${t('lbl_foundation_name')}</label>
+          <input type="text" id="e_nombre" value="${prev.e_nombre}">
+        </div>
+        <div>
+          <label>${t('lbl_inc_date')}</label>
+          <input type="date" id="e_fecha" value="${prev.e_fecha}">
+        </div>
+        <div>
+          <label>${t('lbl_foundation_reg')}</label>
+          <input type="text" id="e_registro" value="${prev.e_registro}">
+        </div>
+        <div>
+          <label>${t('lbl_reg_addr')}</label>
+          <input type="text" id="e_direccion" value="${prev.e_direccion}">
+        </div>
+        <div>
+          <label>${t('lbl_position')}</label>
+          <input type="text" id="e_cargo" value="${prev.e_cargo}">
+        </div>
+        <div>
+          <label>${t('lbl_purpose')}</label>
+          <textarea id="e_finalidad" rows="2">${prev.e_finalidad}</textarea>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function renderModules() {
+  const list = $("modules-list");
+  // Preserve checked state across re-render
+  const checkedNow = new Set(Array.from(list.querySelectorAll('[data-mod]:checked')).map(el => el.dataset.mod));
+  const sourceSet = checkedNow.size > 0 ? checkedNow : state.modules;
+  list.innerHTML = "";
+  Object.keys(MODULES).forEach(key => {
+    const checked = sourceSet.has(key);
+    const row = document.createElement("div");
+    row.className = "checkbox-row";
+    row.innerHTML = `
+      <input type="checkbox" id="mod-${key}" data-mod="${key}" ${checked ? "checked" : ""}>
+      <label for="mod-${key}" style="margin:0">
+        <strong>${key}</strong> - ${t('mod_'+key)}
+      </label>
+    `;
+    list.appendChild(row);
+  });
+  list.querySelectorAll("[data-mod]").forEach(el => {
+    el.addEventListener("change", (e) => {
+      if (e.target.checked) state.modules.add(e.target.dataset.mod);
+      else state.modules.delete(e.target.dataset.mod);
+    });
+  });
+}
+
+// ============================================================
+// Event handlers
+// ============================================================
+
+$("profile").addEventListener("change", (e) => {
+  state.profile = e.target.value || null;
+  if (!state.profile) {
+    $("section-comparecencia").classList.add("hidden");
+    $("section-entity").classList.add("hidden");
+    state.modules = new Set();
+    renderModules();
+    return;
+  }
+  const profile = PROFILES[state.profile];
+
+  // Comparecencia
+  $("section-comparecencia").classList.remove("hidden");
+  const sel = $("comparecencia");
+  sel.innerHTML = profile.comparecencia.map(c => `<option value="${c}">${t('comp_'+c)}</option>`).join("");
+  state.comparecencia = profile.comparecencia[0];
+  state.people = [];
+  for (let i = 0; i < COMPARECENCIA_PEOPLE[state.comparecencia].min; i++) state.people.push(newPerson());
+  renderPeople();
+
+  // Entity
+  renderEntity();
+
+  // Modules
+  state.modules = new Set(profile.modules);
+  renderModules();
+});
+
+$("comparecencia").addEventListener("change", (e) => {
+  state.comparecencia = e.target.value;
+  state.people = [];
+  for (let i = 0; i < COMPARECENCIA_PEOPLE[state.comparecencia].min; i++) state.people.push(newPerson());
+  renderPeople();
+});
+
+$("add-person").addEventListener("click", () => {
+  const { max } = COMPARECENCIA_PEOPLE[state.comparecencia];
+  if (state.people.length < max) {
+    state.people.push(newPerson());
+    renderPeople();
+  }
+});
+
+$("gestor_nie_enabled").addEventListener("change", (e) => {
+  $("gestor-nie-fields").classList.toggle("hidden", !e.target.checked);
+});
+
+$("doc_vigencia_tipo").addEventListener("change", (e) => {
+  $("vigencia-date-wrap").classList.toggle("hidden", e.target.value !== "fecha");
+});
+
+// ============================================================
+// Document generation
+// ============================================================
+
+function fmtDate(iso) {
+  if (!iso) return ["", ""];
+  const [y, m, d] = iso.split("-").map(Number);
+  return [
+    `${d} de ${MONTHS_ES[m-1]} de ${y}`,
+    `${MONTHS_EN[m-1]} ${d}, ${y}`
+  ];
+}
+
+function getEntity() {
+  const profile = PROFILES[state.profile];
+  if (!profile.entity) return null;
+  const e = {
+    nombre: $("e_nombre")?.value || "",
+    fecha: $("e_fecha")?.value || "",
+    registro: $("e_registro")?.value || "",
+    direccion: $("e_direccion")?.value || ""
+  };
+  if (profile.entity === "sociedad") {
+    e.titulares = $("e_titulares")?.value || "";
+  } else {
+    e.cargo = $("e_cargo")?.value || "";
+    e.finalidad = $("e_finalidad")?.value || "";
+  }
+  return e;
+}
+
+function getApoderadoLocal() {
+  return {
+    tratamiento: $("al_tratamiento").value,
+    nombre: $("al_nombre").value,
+    nacionalidad: $("al_nacionalidad").value,
+    profesion: $("al_profesion").value,
+    estado_civil: $("al_estado_civil").value,
+    doc_tipo: $("al_doc_tipo").value,
+    doc_num: $("al_doc_num").value,
+    direccion: $("al_direccion").value
+  };
+}
+
+function getGestorNie() {
+  if (!$("gestor_nie_enabled").checked) return null;
+  return {
+    nombre: $("gn_nombre").value,
+    doc_tipo: $("gn_doc_tipo").value,
+    doc_num: $("gn_doc_num").value,
+    direccion: $("gn_direccion").value
+  };
+}
+
+function getDocMeta() {
+  return {
+    vigencia_tipo: $("doc_vigencia_tipo")?.value || "indef",
+    vigencia_hasta: $("doc_vigencia_hasta")?.value || ""
+  };
+}
+
+// ============================================================
+// Diccionario de traducciones ES -> EN para campos de persona
+// ============================================================
+const DICT_ES_EN = {
+  // Profesiones
+  "abogado": "lawyer", "abogada": "lawyer",
+  "ingeniero": "engineer", "ingeniera": "engineer",
+  "médico": "doctor", "médica": "doctor",
+  "arquitecto": "architect", "arquitecta": "architect",
+  "economista": "economist",
+  "empresario": "businessman", "empresaria": "businesswoman",
+  "director": "director", "directora": "director",
+  "consultor": "consultant", "consultora": "consultant",
+  "contable": "accountant",
+  "profesor": "teacher", "profesora": "teacher",
+  "estudiante": "student",
+  "jubilado": "retired", "jubilada": "retired",
+  "pensionista": "pensioner",
+  "funcionario": "civil servant", "funcionaria": "civil servant",
+  "comerciante": "merchant",
+  "gestor": "administrative agent", "gestora": "administrative agent",
+  "administrativo": "administrator", "administrativa": "administrator",
+  "gerente": "manager",
+  "dependiente": "shop assistant", "dependienta": "shop assistant",
+  "enfermero": "nurse", "enfermera": "nurse",
+  "informático": "IT specialist", "informática": "IT specialist",
+  // Estado civil
+  "soltero": "single", "soltera": "single",
+  "casado": "married", "casada": "married",
+  "divorciado": "divorced", "divorciada": "divorced",
+  "viudo": "widowed", "viuda": "widowed",
+  "separado": "separated", "separada": "separated",
+  // Nacionalidades
+  "danés": "Danish", "danesa": "Danish",
+  "española": "Spanish", "español": "Spanish",
+  "alemán": "German", "alemana": "German",
+  "francés": "French", "francesa": "French",
+  "británico": "British", "británica": "British",
+  "sueco": "Swedish", "sueca": "Swedish",
+  "noruego": "Norwegian", "noruega": "Norwegian",
+  "finlandés": "Finnish", "finlandesa": "Finnish",
+  "italiano": "Italian", "italiana": "Italian",
+  "holandés": "Dutch", "holandesa": "Dutch",
+  "belga": "Belgian",
+  "polaco": "Polish", "polaca": "Polish",
+  "portugués": "Portuguese", "portuguesa": "Portuguese",
+  "estadounidense": "American",
+  "canadiense": "Canadian",
+  "australiano": "Australian", "australiana": "Australian"
+};
+
+function translateField(val) {
+  if (!val) return val;
+  const lower = val.trim().toLowerCase();
+  return DICT_ES_EN[lower] || val;
+}
+
+function personLineES(p) {
+  const trat = p.tratamiento.toUpperCase();
+  const nombre = p.nombre.toUpperCase();
+  return `${trat} ${nombre}, mayor de edad, de nacionalidad danesa, ${p.estado_civil}, de profesión ${p.profesion}, con pasaporte número ${p.pasaporte} y domicilio en ${p.direccion_dk}, ${p.cp_dk} ${p.ciudad_dk}, Dinamarca.`;
+}
+
+function personLineEN(p) {
+  const trat = (p.tratamiento === "Don" ? "MR." : "MS.");
+  const nombre = p.nombre.toUpperCase();
+  const profesion = translateField(p.profesion);
+  const estadoCivil = translateField(p.estado_civil);
+  return `${trat} ${nombre}, of legal age, of Danish nationality, ${estadoCivil}, by profession ${profesion}, holder of passport number ${p.pasaporte} and residing at ${p.direccion_dk}, ${p.cp_dk} ${p.ciudad_dk}, Denmark.`;
+}
+
+function getPronoun(people) {
+  // Un solo otorgante: pronombre según tratamiento
+  // Varios: "their"
+  if (people.length > 1) return { sub: "they", pos: "their", obj: "them", ref: "themselves" };
+  return people[0].tratamiento === "Don"
+    ? { sub: "he", pos: "his", obj: "him", ref: "himself" }
+    : { sub: "she", pos: "her", obj: "her", ref: "herself" };
+}
+
+function buildComparecencia(lang) {
+  const c = state.comparecencia;
+  const people = state.people;
+  const entity = getEntity();
+  const isEN = lang === "en";
+  const pr = getPronoun(people);
+
+  const header = isEN
+    ? (people.length === 1 ? "APPEARS:" : "APPEAR:")
+    : (people.length === 1 ? "COMPARECE:" : "COMPARECEN:");
+
+  let body = "";
+
+  if (c === "A") {
+    body = (isEN ? personLineEN : personLineES)(people[0]);
+    body += isEN
+      ? `\n\nActing in ${pr.pos} own name and right.`
+      : "\n\nInterviene en su propio nombre y derecho.";
+  } else if (c === "B") {
+    if (isEN) {
+      body = `The spouses ${people[0].tratamiento === "Don" ? "Mr." : "Ms."} ${people[0].nombre} and ${people[1].tratamiento === "Don" ? "Mr." : "Ms."} ${people[1].nombre}, both of legal age, of Danish nationality, by profession ${translateField(people[0].profesion)} and ${translateField(people[1].profesion)} respectively, holders of passport numbers ${people[0].pasaporte} and ${people[1].pasaporte} and common residence at ${people[0].direccion_dk}, ${people[0].cp_dk} ${people[0].ciudad_dk}, Denmark.\n\nActing jointly or severally in their own name and right.`;
+    } else {
+      body = `Los cónyuges ${people[0].tratamiento} ${people[0].nombre} y ${people[1].tratamiento} ${people[1].nombre}, ambos mayores de edad, de nacionalidad danesa, de profesión ${people[0].profesion} y ${people[1].profesion} respectivamente, con pasaportes número ${people[0].pasaporte} y ${people[1].pasaporte} y domicilio común en ${people[0].direccion_dk}, ${people[0].cp_dk} ${people[0].ciudad_dk}, Dinamarca.\n\nIntervienen juntos o separadamente en su propio nombre y derecho.`;
+    }
+  } else if (c === "C") {
+    body = people.map((p, i) => `${i+1}. ${(isEN ? personLineEN : personLineES)(p)}`).join("\n\n");
+    body += isEN ? "\n\nActing jointly or severally in their own name and right." : "\n\nIntervienen juntos o separadamente en su propio nombre y derecho.";
+  } else if (c === "D" || c === "E") {
+    body = people.map(p => (isEN ? personLineEN : personLineES)(p)).join("\n\n");
+    const entName = (entity.nombre || "").toUpperCase();
+    if (c === "D") {
+      body += isEN
+        ? `\n\nActing in ${pr.pos} capacity as sole director of the Danish company ${entName}, with registered office at ${entity.direccion}.`
+        : `\n\nInterviene en su condición de administrador único de la sociedad danesa ${entName}, con domicilio en ${entity.direccion}.`;
+    } else {
+      body += isEN
+        ? `\n\nActing in their capacity as directors of the Danish company ${entName}, with registered office at ${entity.direccion}.`
+        : `\n\nIntervienen en su condición de administradores de la sociedad danesa ${entName}, con domicilio en ${entity.direccion}.`;
+    }
+  } else if (c === "F") {
+    body = people.map(p => (isEN ? personLineEN : personLineES)(p)).join("\n\n");
+    const entName = (entity.nombre || "").toUpperCase();
+    body += isEN
+      ? `\n\nActing in ${pr.pos} capacity as ${entity.cargo} of the Danish foundation ${entName}, with registered office at ${entity.direccion}.`
+      : `\n\nInterviene${people.length>1?"n":""} en su condición de ${entity.cargo} de la fundación danesa ${entName}, con domicilio en ${entity.direccion}.`;
+  }
+
+  return `${header}\n\n${body}`;
+}
+
+function buildCertifico(lang) {
+  const profile = PROFILES[state.profile];
+  if (!profile.entity) return null;
+  const entity = getEntity();
+  const isEN = lang === "en";
+  const entName = (entity.nombre || "").toUpperCase();
+
+  if (profile.entity === "sociedad") {
+    if (isEN) {
+      return `I CERTIFY:\n\nThat the company ${entName} is validly incorporated under Danish law, was registered on ${fmtDate(entity.fecha)[1]} in the Danish Business Register under number ${entity.registro}, with its registered office at ${entity.direccion}.\n\nThat the appearing party/parties have sufficient powers to grant this power of attorney on behalf of the company.\n\nThat the ultimate beneficial owner(s) (holding more than 25%) is/are: ${entity.titulares}.`;
+    }
+    return `CERTIFICO:\n\nQue la sociedad ${entName} está válidamente constituida conforme a la legislación danesa, fue inscrita el ${fmtDate(entity.fecha)[0]} en el Registro Mercantil danés (Danish Business Register) con número ${entity.registro}, y tiene su domicilio social en ${entity.direccion}.\n\nQue el/los compareciente(s) ostenta(n) facultades suficientes para otorgar el presente poder en nombre de la sociedad.\n\nQue el/los titular(es) real(es) de la sociedad (participación superior al 25%) es/son: ${entity.titulares}.`;
+  } else {
+    if (isEN) {
+      return `I CERTIFY:\n\nThat the foundation ${entName} is validly incorporated under Danish law, was registered on ${fmtDate(entity.fecha)[1]} under number ${entity.registro}, with its registered office at ${entity.direccion}.\n\nThat the purpose of the foundation is: ${entity.finalidad}.\n\nThat the appearing party/parties have sufficient powers to grant this power of attorney on behalf of the foundation.`;
+    }
+    return `CERTIFICO:\n\nQue la fundación ${entName} está válidamente constituida conforme a la legislación danesa, fue inscrita el ${fmtDate(entity.fecha)[0]} con número ${entity.registro} y tiene su domicilio en ${entity.direccion}.\n\nQue la finalidad de la fundación es: ${entity.finalidad}.\n\nQue el/los compareciente(s) ostenta(n) facultades suficientes para otorgar el presente poder en nombre de la fundación.`;
+  }
+}
+
+function buildOtorga(lang) {
+  const al = getApoderadoLocal();
+  const isEN = lang === "en";
+  const apo = APODERADOS_FIJOS[lang];
+
+  const alTratEN = al.tratamiento === "Don" ? "MR." : "MS.";
+  const alTratES = al.tratamiento.toUpperCase();
+  const alNombre = (al.nombre || "").toUpperCase();
+  const alLine = isEN
+    ? `${alTratEN} ${alNombre}, of ${translateField(al.nacionalidad)} nationality, by profession ${translateField(al.profesion)}, ${translateField(al.estado_civil)}, holder of ${al.doc_tipo} number ${al.doc_num} and professional address at ${al.direccion}.`
+    : `${alTratES} ${alNombre}, de nacionalidad ${al.nacionalidad}, de profesión ${al.profesion}, ${al.estado_civil}, con ${al.doc_tipo} número ${al.doc_num} y domicilio profesional en ${al.direccion}.`;
+
+  if (isEN) {
+    return `GRANT(S):\n\nThat jointly or severally they confer a general power of attorney, as broad and sufficient as required by law, in favour of:\n\n- ${apo[0]}\n\n- ${apo[1]}\n\n- ${alLine}\n\nTo act jointly or severally, even where self-contracting, multiple representation or conflict of interests may arise, with the following powers:`;
+  }
+  return `OTORGA(N):\n\nQue junto o separadamente confiere(n) poder general, tan amplio y bastante como en derecho sea necesario, a favor de:\n\n- ${apo[0]}\n\n- ${apo[1]}\n\n- ${alLine}\n\nPara que actuando de forma indistinta y solidariamente, aun incurriendo en la figura jurídica de la autocontratación, múltiple representación o conflicto de intereses, puedan ejercer las siguientes facultades:`;
+}
+
+const ROMAN = ["I","II","III","IV","V","VI","VII","VIII","IX","X","XI","XII","XIII","XIV"];
+
+function buildFacultades(lang) {
+  // Source of truth: checkboxes currently checked in the UI
+  const active = Array.from(document.querySelectorAll('[data-mod]:checked'))
+    .map(el => el.dataset.mod)
+    .sort((a, b) => Object.keys(MODULES).indexOf(a) - Object.keys(MODULES).indexOf(b));
+  return active.map((key, i) => {
+    const m = MODULES[key];
+    const title = lang === "en" ? m.title_en : m.title_es;
+    const body = lang === "en" ? m.en : m.es;
+    return `${ROMAN[i]}. ${title}\n\n${body}`;
+  }).join("\n\n");
+}
+
+function buildVigencia(lang) {
+  const meta = getDocMeta();
+  if (meta.vigencia_tipo !== "fecha" || !meta.vigencia_hasta) return null;
+  const [dES, dEN] = fmtDate(meta.vigencia_hasta);
+  if (lang === "en") {
+    return `VALIDITY\n\nThis power of attorney shall be valid until ${dEN}, unless expressly revoked earlier by the grantor(s).`;
+  }
+  return `VIGENCIA\n\nEl presente poder tendrá vigencia hasta el ${dES}, salvo revocación expresa anterior por parte del/los otorgante(s).`;
+}
+
+function buildCierre(lang) {
+  if (lang === "en") {
+    return `RATIFICATION AND SUBSTITUTION\n\nThe grantor(s) ratify all actions carried out by the attorneys under this power. The grantor(s) expressly authorise the attorneys to sub-delegate, in whole or in part, the powers conferred, in favour of Ms. Bárbara Román Méndez, and to revoke such sub-delegations.\n\nThat this document produces in Sweden the effects of a public power of attorney, and that its content and form comply with the legal requirements of the Swedish legal system, with functional equivalence to powers of attorney granted by Spanish public deed.\n\nFor its use in Spain, this power of attorney is considered an equivalent foreign public document, in accordance with the principle of functional equivalence recognised by Spanish law and, in particular, by the Resolution of the Spanish Directorate-General of Registries and Notaries of 18 December 2018 (Official Gazette of 28 January 2019), on the effectiveness in Spain of powers of attorney granted before foreign notarial authorities.`;
+  }
+  return `RATIFICACIÓN Y SUBAPODERAMIENTO\n\nEl/los otorgante(s) ratifica(n) cuantas actuaciones realicen los apoderados en uso del presente poder. Faculta(n) expresamente a los apoderados para subapoderar, total o parcialmente, las facultades conferidas a favor de Doña Bárbara Román Méndez, así como para revocar dichos subapoderamientos.\n\nQue el presente documento produce en Suecia los efectos propios de un poder público, y que su contenido y forma responden a las exigencias legales del ordenamiento sueco, con vocación de equivalencia funcional respecto de los poderes otorgados en escritura pública conforme al Derecho español.\n\nEste poder es considerado, a los efectos de su utilización en España, como documento público extranjero equivalente, conforme al principio de equivalencia funcional reconocido por el Derecho español y, en particular, por la Resolución de la Dirección General de los Registros y del Notariado de 18 de diciembre de 2018 (BOE de 28 de enero de 2019), relativa a la eficacia en España de poderes otorgados ante autoridades notariales extranjeras.`;
+}
+
+function buildGestorNie(lang) {
+  const g = getGestorNie();
+  if (!g) return null;
+  if (lang === "en") {
+    return `EXPRESS POWER TO THE NIE AGENT\n\nAn express power is also granted, exclusively for the purpose of obtaining the NIE of the grantor(s), in favour of:\n\n${g.nombre}, holder of ${g.doc_tipo} number ${g.doc_num} and with professional address at ${g.direccion}.`;
+  }
+  return `FACULTAD EXPRESA AL GESTOR\n\nSe confiere asimismo poder expreso, exclusivamente para tramitar el NIE del/los otorgante(s), a favor de:\n\n${g.nombre}, con ${g.doc_tipo} número ${g.doc_num} y domicilio profesional en ${g.direccion}.`;
+}
+
+function buildSections() {
+  const profile = PROFILES[state.profile];
+  const meta = getDocMeta();
+
+  const titleES = `ESCRITURA DE PODER DE ${profile.title_es}`;
+  const titleEN = `DEED OF POWER OF ATTORNEY FOR ${profile.title_en}`;
+
+  const sections = [];
+  sections.push({ kind: "title", es: titleES, en: titleEN });
+  sections.push({ kind: "block", es: buildComparecencia("es"), en: buildComparecencia("en") });
+  const certES = buildCertifico("es");
+  if (certES) sections.push({ kind: "block", es: certES, en: buildCertifico("en") });
+  sections.push({ kind: "block", es: buildOtorga("es"), en: buildOtorga("en") });
+  sections.push({ kind: "block", es: buildFacultades("es"), en: buildFacultades("en") });
+  const vigES = buildVigencia("es");
+  if (vigES) sections.push({ kind: "block", es: vigES, en: buildVigencia("en") });
+  sections.push({ kind: "block", es: buildCierre("es"), en: buildCierre("en") });
+  const gnES = buildGestorNie("es");
+  if (gnES) sections.push({ kind: "block", es: gnES, en: buildGestorNie("en") });
+  return sections;
+}
+
+// Identifica si una línea es cabecera (toda mayúsculas, o número romano + título, o termina en ":")
+function isHeaderLine(line) {
+  const t = line.trim();
+  if (!t) return false;
+  if (/^[IVX]+\.\s+.+/.test(t)) return true;            // I. ALGO
+  if (/[A-ZÁÉÍÓÚÑÜ]:$/.test(t)) return true;             // COMPARECE: / I CERTIFY:
+  if (/^[A-ZÁÉÍÓÚÑÜ\s,()/\-]+$/.test(t) && t.length > 3) return true; // todo mayúsculas
+  return false;
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function paragraphsToHTML(text) {
+  return text.split(/\n\n+/).map(p => {
+    const lines = p.split("\n").map(l => escapeHtml(l));
+    const html = lines.map(l => isHeaderLine(l) ? `<strong>${l}</strong>` : l).join("<br>");
+    return `<p>${html}</p>`;
+  }).join("");
+}
+
+function renderPreviewHTML() {
+  const sections = buildSections();
+  let html = "";
+  sections.forEach(s => {
+    if (s.kind === "title") {
+      html += `<div class="doc-title">${escapeHtml(s.es)}<br><em>${escapeHtml(s.en)}</em></div>`;
+    } else if (s.kind === "date") {
+      html += `<p style="text-align:center"><strong>${escapeHtml(s.es)}</strong><br><em>${escapeHtml(s.en)}</em></p>`;
+    } else {
+      html += `<table class="doc-table"><tr><td>${paragraphsToHTML(s.es)}</td><td>${paragraphsToHTML(s.en)}</td></tr></table>`;
+    }
+  });
+  return html;
+}
+
+$("btn-preview").addEventListener("click", () => {
+  const validation = validate();
+  $("status").textContent = validation.warnings.length ? t('status_warnings') + validation.warnings.join(" - ") : "";
+  $("status").className = validation.warnings.length ? "error" : "";
+  const preview = $("preview");
+  preview.style.display = "block";
+  preview.innerHTML = renderPreviewHTML();
+  preview.scrollIntoView({ behavior: "smooth", block: "start" });
+});
+
+function validate() {
+  const warnings = [];
+  if (!state.profile) warnings.push(t('warn_profile'));
+  if (state.people.length === 0) warnings.push(t('warn_person'));
+  state.people.forEach((p, i) => {
+    if (!p.nombre) warnings.push(t('warn_person_n').replace('{n}', i+1));
+  });
+  const al = getApoderadoLocal();
+  if (!al.nombre) warnings.push(t('warn_local'));
+  const meta = getDocMeta();
+  return { ok: warnings.length === 0, warnings };
+}
+
+// .docx generation - bilingual two-column layout
+function paragraphsForCell(text) {
+  const { Paragraph, TextRun } = window.docx;
+  const paras = [];
+  const blocks = text.split(/\n\n+/);
+  blocks.forEach((blk, bIdx) => {
+    const lines = blk.split("\n");
+    lines.forEach((line, lIdx) => {
+      const isHdr = isHeaderLine(line);
+      paras.push(new Paragraph({
+        spacing: { after: lIdx === lines.length - 1 && bIdx < blocks.length - 1 ? 240 : 80 },
+        children: [new TextRun({
+          text: line,
+          bold: isHdr,
+          size: 22
+        })]
+      }));
+    });
+  });
+  return paras;
+}
+
+$("btn-generate").addEventListener("click", async () => {
+  const validation = validate();
+  if (validation.warnings.length) {
+    $("status").textContent = t('status_warnings') + validation.warnings.join(" - ");
+    $("status").className = "error";
+    return;
+  }
+
+  $("status").textContent = t('status_generating');
+  $("status").className = "";
+
+  try {
+    const D = window.docx;
+    const { Document, Packer, Paragraph, TextRun, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle } = D;
+
+    const sections = buildSections();
+    const children = [];
+
+    const cellBorders = {
+      top:    { style: BorderStyle.SINGLE, size: 4, color: "DDDDDD" },
+      bottom: { style: BorderStyle.SINGLE, size: 4, color: "DDDDDD" },
+      left:   { style: BorderStyle.SINGLE, size: 4, color: "DDDDDD" },
+      right:  { style: BorderStyle.SINGLE, size: 4, color: "DDDDDD" }
+    };
+
+    sections.forEach(s => {
+      if (s.kind === "title") {
+        children.push(new Paragraph({
+          alignment: AlignmentType.CENTER,
+          spacing: { after: 120 },
+          children: [new TextRun({ text: s.es, bold: true, size: 30 })]
+        }));
+        children.push(new Paragraph({
+          alignment: AlignmentType.CENTER,
+          spacing: { after: 240 },
+          children: [new TextRun({ text: s.en, bold: true, size: 26 })]
+        }));
+      } else if (s.kind === "date") {
+        children.push(new Paragraph({
+          alignment: AlignmentType.CENTER,
+          children: [new TextRun({ text: s.es, bold: true, size: 22 })]
+        }));
+        children.push(new Paragraph({
+          alignment: AlignmentType.CENTER,
+          spacing: { after: 240 },
+          children: [new TextRun({ text: s.en, bold: true, size: 22 })]
+        }));
+      } else {
+        // Two-column block: table with one row, two cells
+        const row = new TableRow({
+          children: [
+            new TableCell({
+              width: { size: 50, type: WidthType.PERCENTAGE },
+              borders: cellBorders,
+              children: paragraphsForCell(s.es)
+            }),
+            new TableCell({
+              width: { size: 50, type: WidthType.PERCENTAGE },
+              borders: cellBorders,
+              children: paragraphsForCell(s.en)
+            })
+          ]
+        });
+        children.push(new Table({
+          width: { size: 100, type: WidthType.PERCENTAGE },
+          rows: [row]
+        }));
+        children.push(new Paragraph({ text: "", spacing: { after: 280 } }));
+      }
+    });
+
+    const doc = new Document({
+      styles: {
+        default: {
+          document: {
+            run: { font: "Times New Roman", size: 22 }
+          }
+        }
+      },
+      sections: [{
+        properties: {
+          page: {
+            margin: { top: 1200, right: 1100, bottom: 1200, left: 1100 }
+          }
+        },
+        children
+      }]
+    });
+    const blob = await Packer.toBlob(doc);
+
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    const primerNombre = (state.people[0]?.nombre || 'otorgante')
+      .toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+    const perfilCorto = state.profile.replace('_', '-');
+    const fecha = (new Date()).toISOString().slice(0,10);
+    const fname = `poder_${perfilCorto}_${primerNombre}_${fecha}.docx`;
+    a.href = url; a.download = fname;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    $("status").textContent = t('status_downloaded') + fname;
+  } catch (err) {
+    console.error(err);
+    $("status").textContent = t('status_error') + err.message;
+    $("status").className = "error";
+  }
+});
+
+// Language switcher
+document.querySelectorAll('.lang-switcher button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentLang = btn.dataset.lang;
+    document.querySelectorAll('.lang-switcher button').forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+    document.documentElement.lang = currentLang;
+    applyI18n();
+  });
+});
+
+// Init
+renderProfileOptions();
+renderModules();
+applyI18n();
+</script>
+</body>
+</html>
